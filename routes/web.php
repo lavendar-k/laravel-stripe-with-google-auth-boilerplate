@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\ChatController;
 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
@@ -21,6 +22,11 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get("/chat", function () {
+    return Inertia::render("Chat");
+})->middleware(["auth", "verified"])->name("chat");
+Route::post('/chat/send-message', [ChatController::class, 'sendMessage']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
